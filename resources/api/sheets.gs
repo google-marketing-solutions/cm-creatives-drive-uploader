@@ -24,15 +24,14 @@
 
 /** @class SheetsApi representing a wrapper for the the Google Sheets API. */
 class SheetsApi {
-
- /**
-  * @constructs an instance of SheetsApi using a reference to the associated
-  * active spreadsheet.
-  *
-  * @see {@link SpreadsheetApp#getActiveSpreadsheet}.
-  *
-  * @param {Object!} spreadsheet  the associated spreadsheet
-  */
+  /**
+   * @constructs an instance of SheetsApi using a reference to the associated
+   * active spreadsheet.
+   *
+   * @see {@link SpreadsheetApp#getActiveSpreadsheet}.
+   *
+   * @param {Object!} spreadsheet  the associated spreadsheet
+   */
   constructor(spreadsheet) {
     /** @private */ this.spreadsheet_ = spreadsheet;
   }
@@ -47,7 +46,7 @@ class SheetsApi {
    * @returns {array!} a two-dimensional array of the sheet's data
    */
   getSheetData(sheetName, startRow, startCol) {
-    let sheet = this.spreadsheet_.getSheetByName(sheetName);
+    const sheet = this.spreadsheet_.getSheetByName(sheetName);
 
     const lastRow = sheet.getLastRow();
     const lastCol = sheet.getLastColumn();
@@ -64,8 +63,8 @@ class SheetsApi {
    * @returns {string} the value of the cell
    */
   getCellValue(sheetName, cellId) {
-    let cell = this.spreadsheet_
-        .getRange(sheetName + '!' + cellId + ':' + cellId);
+    const cell =
+        this.spreadsheet_.getRange(sheetName + '!' + cellId + ':' + cellId);
 
     return cell.getValue();
   }
@@ -78,10 +77,9 @@ class SheetsApi {
    * @param {string} value       the value of the cell
    */
   setCellValue(sheetName, cellId, value) {
-    let cell = this.spreadsheet_
-        .getRange(sheetName + '!' + cellId + ':' + cellId);
+    const cell =
+        this.spreadsheet_.getRange(sheetName + '!' + cellId + ':' + cellId);
 
     cell.setValue(value);
   }
-
 }

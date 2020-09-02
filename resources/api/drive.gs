@@ -24,7 +24,6 @@
 
 /** @class DriveApi representing a wrapper for the the Google Drive API. */
 class DriveApi {
-
   /**
    * Retrieve the contents of a file stored on Drive by its ID.
    *
@@ -34,10 +33,9 @@ class DriveApi {
    */
   static getFileByDriveId(fileId) {
     console.log(`Fetching file with ID [${fileId}] from Drive...`);
-    let file = DriveApp.getFileById(fileId).getBlob();
+    const file = DriveApp.getFileById(fileId).getBlob();
     console.log(`Fetched [${file.getBytes().length}] bytes.`);
 
     return file;
   }
-
 }

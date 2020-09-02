@@ -1,6 +1,6 @@
 # Campaign Manager Creatives Drive Uploader
 
-This repository contains Google Apps Script code that use the
+This repository contains Google Apps Script code that uses the
 [Campaign Manager Trafficking API](https://developers.google.com/doubleclick-advertisers/getting_started)
 to upload HTML5 creatives stored in Google Drive to Campaign Manager.
 

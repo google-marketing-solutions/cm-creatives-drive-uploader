@@ -25,7 +25,7 @@
 /**
  * Configuration for the associated Google Sheets spreadsheet
  */
-let config = {
+const config = {
   profileId: {
     sheetName: 'SETUP',
     cell: 'J20',
@@ -43,11 +43,7 @@ let config = {
     backupImagePath: 6,
     backupImageClickThroughUrl: 7,
   },
-  status: {
-    column: 8,
-    columnId: 'I',
-    done: 'DONE'
-  }
+  status: {column: 8, columnId: 'I', done: 'DONE'}
 };
 
 /**
@@ -68,22 +64,17 @@ function onOpen() {
  * @see {@link SheetsApi} and {@link CampaignManagerApi}.
  */
 function uploadCreatives() {
-  let sheetsApi = new SheetsApi(SpreadsheetApp.getActiveSpreadsheet());
+  const sheetsApi = new SheetsApi(SpreadsheetApp.getActiveSpreadsheet());
+  const profileId =
+      sheetsApi.getCellValue(config.profileId.sheetName, config.profileId.cell);
+  const cmApi = new CampaignManagerApi(profileId, config.data);
 
-  const profileId = sheetsApi.getCellValue(
-      config.profileId.sheetName,
-      config.profileId.cell);
-
-  let data = sheetsApi.getSheetData(
-      config.data.sheetName,
-      config.data.startRow,
-      config.data.startCol);
+  const data = sheetsApi.getSheetData(
+      config.data.sheetName, config.data.startRow, config.data.startCol);
 
   data.forEach(function(row, index) {
     if (row[config.data.advertiserId] && !row[config.status.column]) {
       try {
-        let cmApi = new CampaignManagerApi(profileId, config.data);
-
         cmApi.insertCreative(row);
         sheetsApi.setCellValue(
             config.data.sheetName,

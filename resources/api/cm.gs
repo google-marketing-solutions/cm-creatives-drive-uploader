@@ -24,13 +24,13 @@
 
 /** @class CampaignManagerApi representing a wrapper for the the CM API. */
 class CampaignManagerApi {
-
   /**
-  * @constructs an instance of CampaignManagerApi.
-  *
-  * @param {string} profileId    the UserProfile ID of the associated CM account
-  * @param {Object!} dataConfig  the data row-column configuration
-  */
+   * @constructs an instance of CampaignManagerApi.
+   *
+   * @param {string} profileId    the UserProfile ID of the associated CM
+   *     account
+   * @param {Object!} dataConfig  the data row-column configuration
+   */
   constructor(profileId, dataConfig) {
     /** @private */ this.profileId_ = profileId;
     /** @private */ this.dataConfig_ = dataConfig;
@@ -46,11 +46,8 @@ class CampaignManagerApi {
    * @throws {Error!} if no landing pages exist for the given advertiser
    */
   getDefaultAdvertiserLandingPageId_(advertiserId) {
-    let response = CampaignManager.AdvertiserLandingPages.list(
-      this.profileId_, {
-        'advertiserIds': [advertiserId],
-        'maxResults': 1
-    });
+    const response = CampaignManager.AdvertiserLandingPages.list(
+        this.profileId_, {'advertiserIds': [advertiserId], 'maxResults': 1});
 
     if (!response['landingPages'][0]) {
       throw new Error(
@@ -75,28 +72,21 @@ class CampaignManagerApi {
     const creativeAssetPath = row[this.dataConfig_.creativeAssetPath];
     const creativeDimensionsRaw = row[this.dataConfig_.creativeDimensionsRaw];
 
-    let creativeAssetMetadata = CreativeAssetUploader.insertCreativeAsset(
-        this.profileId_,
-        advertiserId,
-        creativeAssetName,
-        'HTML',
+    const creativeAssetMetadata = CreativeAssetUploader.insertCreativeAsset(
+        this.profileId_, advertiserId, creativeAssetName, 'HTML',
         creativeAssetPath);
-    let creativeAsset = CreativeAssetUploader.buildCreativeAsset(
-        creativeAssetMetadata,
-        'PRIMARY');
-    let creativeDimensions = creativeDimensionsRaw.split('x');
+    const creativeAsset = CreativeAssetUploader.buildCreativeAsset(
+        creativeAssetMetadata, 'PRIMARY');
+    const creativeDimensions = creativeDimensionsRaw.split('x');
 
     creative.creativeAssets.push(creativeAsset);
     creative.advertiserId = advertiserId;
     creative.name = creativeName;
 
     CreativeUploader.addCreativeSize(
-        this.profileId_,
-        creativeDimensions,
-        creative);
+        this.profileId_, creativeDimensions, creative);
     CreativeUploader.addCreativeClickTags(
-        creativeAssetMetadata.clickTags,
-        creative);
+        creativeAssetMetadata.clickTags, creative);
   }
 
   /**
@@ -110,28 +100,24 @@ class CampaignManagerApi {
     const advertiserId = row[this.dataConfig_.advertiserId];
     const backupImageName = row[this.dataConfig_.backupImageName];
     const backupImagePath = row[this.dataConfig_.backupImagePath];
-    const backupImageCustomClickThroughUrl = row[
-        this.dataConfig_.backupImageClickThroughUrl];
+    const backupImageCustomClickThroughUrl =
+        row[this.dataConfig_.backupImageClickThroughUrl];
 
-    let backupImageAsset = CreativeAssetUploader.insertAndbuildCreativeAsset(
-        this.profileId_,
-        advertiserId,
-        backupImageName,
-        'HTML_IMAGE',
-        backupImagePath,
-        'BACKUP_IMAGE');
+    const backupImageAsset = CreativeAssetUploader.insertAndbuildCreativeAsset(
+        this.profileId_, advertiserId, backupImageName, 'HTML_IMAGE',
+        backupImagePath, 'BACKUP_IMAGE');
 
-    let backupImageClickThroughUrl = CampaignManager
-        .newCreativeClickThroughUrl();
+    const backupImageClickThroughUrl =
+        CampaignManager.newCreativeClickThroughUrl();
     if (backupImageCustomClickThroughUrl) {
-      backupImageClickThroughUrl
-          .customClickThroughUrl = backupImageCustomClickThroughUrl;
+      backupImageClickThroughUrl.customClickThroughUrl =
+          backupImageCustomClickThroughUrl;
     } else {
-      backupImageClickThroughUrl.landingPageId = this
-          .getDefaultAdvertiserLandingPageId_(advertiserId);
+      backupImageClickThroughUrl.landingPageId =
+          this.getDefaultAdvertiserLandingPageId_(advertiserId);
     }
 
-    let backupImageTargetWindow = CampaignManager.newTargetWindow();
+    const backupImageTargetWindow = CampaignManager.newTargetWindow();
     backupImageTargetWindow.targetWindowOption = 'NEW_WINDOW';
 
     creative.backupImageClickThroughUrl = backupImageClickThroughUrl;
@@ -149,7 +135,7 @@ class CampaignManagerApi {
   insertCreative(row) {
     console.log(`Inserting creative with config: ${JSON.stringify(row)}.`);
 
-    let creative = CampaignManager.newCreative();
+    const creative = CampaignManager.newCreative();
     creative.type = 'DISPLAY';
     creative.active = true;
     creative.creativeAssets = [];
@@ -157,15 +143,13 @@ class CampaignManagerApi {
     this.addMainCreative_(row, creative);
     this.addCreativeBackupImage_(row, creative);
 
-    let creativeResponse = CampaignManager.Creatives.insert(
-        creative,
-        this.profileId_);
+    const creativeResponse =
+        CampaignManager.Creatives.insert(creative, this.profileId_);
 
     console.log(
         `Created HTML5 display creative with ID ` +
         `[${creativeResponse.id}] and Name [${creativeResponse.name}]`);
   }
-
 }
 
 /**
@@ -173,7 +157,6 @@ class CampaignManagerApi {
  * upload functionality.
  */
 class CreativeAssetUploader {
-
   /**
    * Creates and uploads a creative asset using the given parameters and file
    * content from Google Drive.
@@ -189,22 +172,17 @@ class CreativeAssetUploader {
    * @returns {Object!} the {@link CreativeAssetMetadata} upload response
    **/
   static insertCreativeAsset(
-      profileId,
-      advertiserId,
-      assetName,
-      assetType,
-      assetDriveId) {
-    let creativeAssetId = CampaignManager.newCreativeAssetId();
+      profileId, advertiserId, assetName, assetType, assetDriveId) {
+    const creativeAssetId = CampaignManager.newCreativeAssetId();
     creativeAssetId.name = assetName;
     creativeAssetId.type = assetType;
 
-    let creativeAssetMetadata = CampaignManager.newCreativeAssetMetadata();
+    const creativeAssetMetadata = CampaignManager.newCreativeAssetMetadata();
     creativeAssetMetadata.assetIdentifier = creativeAssetId;
 
-    let content = DriveApi.getFileByDriveId(assetDriveId);
-    let response = CampaignManager
-        .CreativeAssets
-        .insert(creativeAssetMetadata, profileId, advertiserId, content);
+    const content = DriveApi.getFileByDriveId(assetDriveId);
+    const response = CampaignManager.CreativeAssets.insert(
+        creativeAssetMetadata, profileId, advertiserId, content);
 
     console.log(
         `Inserted creative asset with name [${assetName}] and type ` +
@@ -225,7 +203,7 @@ class CreativeAssetUploader {
    * @returns {Object!} the created {@link CreativeAsset}
    **/
   static buildCreativeAsset(creativeAssetMetadata, role) {
-    let creativeAsset = CampaignManager.newCreativeAsset();
+    const creativeAsset = CampaignManager.newCreativeAsset();
     creativeAsset.assetIdentifier = creativeAssetMetadata.assetIdentifier;
     creativeAsset.role = role;
 
@@ -247,22 +225,12 @@ class CreativeAssetUploader {
    * @returns {Object!} the created {@link CreativeAsset}
    **/
   static insertAndbuildCreativeAsset(
-      profileId,
-      advertiserId,
-      assetName,
-      assetType,
-      assetDriveId,
-      role) {
-    let creativeAssetMetadata = this.insertCreativeAsset(
-        profileId,
-        advertiserId,
-        assetName,
-        assetType,
-        assetDriveId);
+      profileId, advertiserId, assetName, assetType, assetDriveId, role) {
+    const creativeAssetMetadata = this.insertCreativeAsset(
+        profileId, advertiserId, assetName, assetType, assetDriveId);
 
     return this.buildCreativeAsset(creativeAssetMetadata, role);
   }
-
 }
 
 /**
@@ -270,7 +238,6 @@ class CreativeAssetUploader {
  * functionality.
  */
 class CreativeUploader {
-
   /**
    * Retrieves the creative sizes for the given creative dimensions.
    * @private
@@ -281,11 +248,9 @@ class CreativeUploader {
    * @returns {Object!} the available sizes for the given creative dimensions
    **/
   static getCreativeSizes_(profileId, creativeDimensions) {
-    let sizes = CampaignManager.Sizes.list(
-      profileId, {
-        'width': creativeDimensions[0],
-        'height': creativeDimensions[1]
-      });
+    const sizes = CampaignManager.Sizes.list(
+        profileId,
+        {'width': creativeDimensions[0], 'height': creativeDimensions[1]});
     console.log(`Fetched creative sizes: ${JSON.stringify(sizes)}.`);
 
     return sizes;
@@ -299,8 +264,8 @@ class CreativeUploader {
    * @param {Object!} creative           the {@link Creative} to update
    **/
   static addCreativeSize(profileId, creativeDimensions, creative) {
-    let creativeSizes = this.getCreativeSizes_(profileId, creativeDimensions);
-    let creativeSize = CampaignManager.newSize();
+    const creativeSizes = this.getCreativeSizes_(profileId, creativeDimensions);
+    const creativeSize = CampaignManager.newSize();
 
     if (creativeSizes) {
       creativeSize.id = creativeSizes['sizes'][0]['id'];
@@ -329,5 +294,4 @@ class CreativeUploader {
       creative.clickTags.push(clickTag);
     });
   }
-
 }
