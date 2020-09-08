@@ -13,17 +13,17 @@ Contributions are highly encouraged; see [CONTRIBUTING.md](CONTRIBUTING.md).
 ### Configuration and Setup
 
 1.  Create a *Google Sheets* spreadsheet that contains the following:
-   - A designated cell for referencing your CM User Profile ID
-   - Columns for the following CM Creative attributes:
-      - Advertiser ID
-      - Creative Name
-      - Creative Size ('width'x'height')
-      - Creative Asset Name
-      - Creative Asset Path (Drive ID)
-      - Creative Backup Image Name
-      - Creative Backup Image Path (Drive ID)
-      - Creative Backup Image Custom Landing Page URL (optional)
-      - Status
+    - A designated cell for referencing your CM User Profile ID
+    - Columns for the following CM Creative attributes:
+       - Advertiser ID
+       - Creative Name
+       - Creative Size ('width'x'height')
+       - Creative Asset Name
+       - Creative Asset Path (Drive ID)
+       - Creative Backup Image Name
+       - Creative Backup Image Path (Drive ID)
+       - Creative Backup Image Custom Landing Page URL (optional)
+       - Status
 1.  Create an *Apps Script* project that is linked to this spreadsheet by
     navigating to *Tools > Script Editor*. Alternatively open the script
     directly from the
