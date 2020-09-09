@@ -52,5 +52,3 @@ Contributions are highly encouraged; see [CONTRIBUTING.md](CONTRIBUTING.md).
     Refer to
     [these guidelines](https://support.google.com/campaignmanager/answer/4483813?hl=en&ref_topic=2826366)
     on how to prepare your creatives before upload.
-
-T.
